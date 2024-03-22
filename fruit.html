@@ -1,0 +1,43 @@
+Imports System.Data.SQLite
+
+
+Public Class Form1
+    Dim lv As ListViewItem
+    Dim selected As String
+
+    Private Sub PopListview()
+
+    End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ListView1.Clear()
+        With ListView1
+
+            .View = View.Details
+            .GridLines = True
+            .Columns.Add("ID", 40)
+            .Columns.Add("Residence Hall", 129)
+            .Columns.Add("Address", 130)
+            .Columns.Add("Telephone", 80)
+            .Columns.Add("Manager", 100)
+
+        End With
+
+        openCon()
+
+        sql = "Select * from tblhall order by idhall"
+        cmd = New SQLiteCommand(sql, cn)
+        dr = cmd.ExecuteReader()
+
+        Do While dr.Read() = True
+            lv = New ListViewItem(dr("idhall").ToString)
+            lv.SubItems.Add(dr("hallname"))
+            lv.SubItems.Add(dr("halladdr"))
+            lv.SubItems.Add(dr("halltel"))
+            lv.SubItems.Add(dr("hallman"))
+            ListView1.Items.Add(lv)
+        Loop
+        dr.Close()
+        cn.Close()
+    End Sub
+End Class
